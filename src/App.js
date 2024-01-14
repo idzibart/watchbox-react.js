@@ -22,7 +22,7 @@ export default function App() {
   useEffect(() => {
     if (title.length >= 3) {
       const search = setTimeout(() => {
-        fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${title}`)
+        fetch(`https://www.omdbapi.com/?apikey=${KEY}&s=${title}`)
           .then((res) => res.json())
           .then((data) => setMovies(data.Search));
       }, 800);
@@ -31,7 +31,7 @@ export default function App() {
   }, [title]);
 
   useEffect(() => {
-    fetch(`http://www.omdbapi.com/?apikey=${KEY}&i=${selectedID}`)
+    fetch(`https://www.omdbapi.com/?apikey=${KEY}&i=${selectedID}`)
       .then((res) => res.json())
       .then((data) => setSingleMovie(data));
   }, [selectedID]);
