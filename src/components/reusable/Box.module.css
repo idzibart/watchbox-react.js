@@ -1,0 +1,9 @@
+.box {
+  background-color: var(--color-grey);
+  border-radius: 5px;
+  overflow: auto;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+}

@@ -1,0 +1,69 @@
+.header {
+  display: block;
+  padding: 2rem 2rem 0 2rem;
+}
+
+.title {
+  text-align: center;
+  font-size: 2.8rem;
+  font-weight: 700;
+}
+
+.img {
+  width: 100%;
+}
+
+.img img {
+  width: 100%;
+  border-radius: 5px;
+}
+
+.moviebox {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  justify-content: start;
+  font-size: 1.6rem;
+  gap: 1.6rem;
+  padding: 1.8rem;
+}
+
+.info {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+}
+
+.data p {
+  padding: 0.8rem;
+  color: var(--color-white);
+  line-height: 1.6rem;
+}
+
+span {
+  text-transform: uppercase;
+  font-size: 70%;
+  color: var(--color-primary);
+  display: block;
+}
+
+.description {
+  display: grid;
+  gap: 1.6rem;
+  padding: 2rem;
+}
+
+.text {
+  font-size: 2rem;
+}
+
+.btn {
+  display: flex;
+  gap: 2rem;
+}
+
+a {
+  color: lightgray;
+}
+
+a:hover {
+  color: var(--color-secondary);
+}

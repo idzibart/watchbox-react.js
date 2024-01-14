@@ -1,0 +1,24 @@
+.input{
+    justify-self: center;
+    border: none;
+    width: 40rem;
+    background-color: var(--color-secondary);
+    color: var(--color-white);
+    border-radius: 5px;
+    padding: 1.6rem;
+    font-size: 1.6rem;
+    font-weight: 700;
+    transition: all 0.5s;
+}
+
+
+.input:focus{
+    outline: none;
+    box-shadow: 0 2rem 2rem rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+}
+
+.input::placeholder{
+    color: var(--color-white2);
+    font-weight: 500;
+}

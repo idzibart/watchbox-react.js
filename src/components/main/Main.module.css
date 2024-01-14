@@ -1,0 +1,9 @@
+.main{
+    margin: auto;
+    margin-top: 2.4rem;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    max-width: 1200px;
+    height: calc(100vh - 10.6rem - 3*2rem);
+    gap: 2rem;
+}

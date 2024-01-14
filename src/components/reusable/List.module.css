@@ -1,0 +1,33 @@
+.list {
+  display: grid;
+  list-style: none;
+  position: relative;
+}
+
+.list img {
+  width: 100%;
+  border-radius: 5px;
+}
+
+.search {
+  grid-template-columns: 6rem auto;
+  font-size: 1.3rem;
+  padding: 1.4rem 1rem;
+  gap: 1rem;
+  border-bottom: 1px solid #525252;
+
+  cursor: pointer;
+}
+
+.search:hover {
+  background-color: var(--color-primary);
+}
+
+.rate {
+  grid-template-columns: 3rem auto;
+  font-size: 1.2rem;
+  font-weight: 300;
+  padding: 0.6rem;
+  gap: 1.4rem;
+  border-bottom: 1px solid #525252;
+}
