@@ -115,16 +115,10 @@ export function MovieInfo({
       </section>
       <section className={style.description}>
         <div className={style.btn}>
-          <Button
-            onClick={handleAddWatched}
-          >
-            👁️‍🗨️ Watched
+          <Button onClick={handleAddWatched} isActive={isInWatched}>
+            👁️‍🗨️ Watched list
           </Button>
-          <Button
-            onClick={handleAddWantWatch}
-          >
-            ➕ Want watch
-          </Button>
+          <Button onClick={handleAddWantWatch} isActive={isInWantWatch}>➕ Want watch list</Button>
         </div>
         <p className={style.text}>
           <span>Description</span>
