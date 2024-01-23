@@ -8,6 +8,7 @@ import { MovieInfo } from "./components/main/MovieInfo";
 import { WantWatch } from "./components/main/WantWatch";
 import { IsWatched } from "./components/main/IsWatched";
 import { Logo } from "./components/nav/Logo";
+import { Loader } from "./components/reusable/Loader";
 
 const KEY = "fa12a022";
 
@@ -18,22 +19,30 @@ export default function App() {
   const [singleMovie, setSingleMovie] = useState({});
   const [watched, setWatched] = useState([]);
   const [wantWatch, setWantWatch] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingSingleMovie, setIsLoadingSingleMovie] = useState(false);
 
   useEffect(() => {
     if (title.length >= 3) {
+      setIsLoading(true);
       const search = setTimeout(() => {
         fetch(`https://www.omdbapi.com/?apikey=${KEY}&s=${title}`)
           .then((res) => res.json())
-          .then((data) => setMovies(data.Search));
+          .then((data) => setMovies(data.Search))
+          .finally(() => setIsLoading(false));
       }, 800);
       return () => clearTimeout(search);
     }
   }, [title]);
 
   useEffect(() => {
-    fetch(`https://www.omdbapi.com/?apikey=${KEY}&i=${selectedID}`)
-      .then((res) => res.json())
-      .then((data) => setSingleMovie(data));
+    if (selectedID) {
+      setIsLoadingSingleMovie(true);
+      fetch(`https://www.omdbapi.com/?apikey=${KEY}&i=${selectedID}`)
+        .then((res) => res.json())
+        .then((data) => setSingleMovie(data))
+        .finally(() => setIsLoadingSingleMovie(false));
+    }
   }, [selectedID]);
 
   function handleDeleteWatched(id) {
@@ -41,7 +50,9 @@ export default function App() {
   }
 
   function handleDeleteWantWatch(id) {
-    setWantWatch((wantWatch) => wantWatch.filter((movie) => movie.imdbID !== id));
+    setWantWatch((wantWatch) =>
+      wantWatch.filter((movie) => movie.imdbID !== id)
+    );
   }
 
   return (
@@ -52,24 +63,30 @@ export default function App() {
       </Navbar>
       <Main>
         <Box>
-          <SearchList
-            movies={movies}
-            selectedID={selectedID}
-            setSelectedID={setSelectedID}
-          />
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <SearchList
+              movies={movies}
+              selectedID={selectedID}
+              setSelectedID={setSelectedID}
+            />
+          )}
         </Box>
         <Box>
-          {selectedID ? (
-            <MovieInfo
-              selectedID={selectedID}
-              singleMovie={singleMovie}
-              setWatched={setWatched}
-              watched={watched}
-              setWantWatch={setWantWatch}
-              wantWatch={wantWatch}
-            />
+          {isLoadingSingleMovie ? (
+            <Loader />
           ) : (
-            ""
+            selectedID && (
+              <MovieInfo
+                selectedID={selectedID}
+                singleMovie={singleMovie}
+                setWatched={setWatched}
+                watched={watched}
+                setWantWatch={setWantWatch}
+                wantWatch={wantWatch}
+              />
+            )
           )}
         </Box>
         <Box>
