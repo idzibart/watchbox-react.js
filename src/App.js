@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { Navbar } from "./components/nav/Navbar";
 import { Search } from "./components/nav/Search";
 import { Main } from "./components/main/Main";
@@ -12,36 +12,59 @@ import { Loader } from "./components/reusable/Loader";
 
 const KEY = "fa12a022";
 
+const initialState = {
+  isLoading: false,
+  isLoadingSingleMovie: false,
+  title: "",
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "setIsLoading":
+      return { ...state, isLoading: action.payload };
+    case "setIsLoadingSingleMovie":
+      return { ...state, isLoadingSingleMovie: action.payload };
+    case "setTitle":
+      return { ...state, title: action.payload };
+    default:
+      return state;
+  }
+}
+
 export default function App() {
-  const [title, setTitle] = useState("");
+  // const [title, setTitle] = useState("");
   const [movies, setMovies] = useState([]);
   const [selectedID, setSelectedID] = useState(null);
   const [singleMovie, setSingleMovie] = useState({});
   const [watched, setWatched] = useState([]);
   const [wantWatch, setWantWatch] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isLoadingSingleMovie, setIsLoadingSingleMovie] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [isLoadingSingleMovie, setIsLoadingSingleMovie] = useState(false);
+
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    if (title.length >= 3) {
-      setIsLoading(true);
+    if (state.title.length >= 3) {
+      dispatch({ type: "setIsLoading", payload: true });
       const search = setTimeout(() => {
-        fetch(`https://www.omdbapi.com/?apikey=${KEY}&s=${title}`)
+        fetch(`https://www.omdbapi.com/?apikey=${KEY}&s=${state.title}`)
           .then((res) => res.json())
           .then((data) => setMovies(data.Search))
-          .finally(() => setIsLoading(false));
+          .finally(() => dispatch({ type: "setIsLoading", payload: false }));
       }, 800);
       return () => clearTimeout(search);
     }
-  }, [title]);
+  }, [state.title]);
 
   useEffect(() => {
     if (selectedID) {
-      setIsLoadingSingleMovie(true);
+      dispatch({ type: "setIsLoadingSingleMovie", payload: true });
       fetch(`https://www.omdbapi.com/?apikey=${KEY}&i=${selectedID}`)
         .then((res) => res.json())
         .then((data) => setSingleMovie(data))
-        .finally(() => setIsLoadingSingleMovie(false));
+        .finally(() =>
+          dispatch({ type: "setIsLoadingSingleMovie", payload: false })
+        );
     }
   }, [selectedID]);
 
@@ -59,11 +82,16 @@ export default function App() {
     <>
       <Navbar>
         <Logo />
-        <Search title={title} setTitle={setTitle} />
+        <Search
+          title={state.title}
+          setTitle={(newTitle) =>
+            dispatch({ type: "setTitle", payload: newTitle })
+          }
+        />
       </Navbar>
       <Main>
         <Box>
-          {isLoading ? (
+          {state.isLoading ? (
             <Loader />
           ) : (
             <SearchList
@@ -74,7 +102,7 @@ export default function App() {
           )}
         </Box>
         <Box>
-          {isLoadingSingleMovie ? (
+          {state.isLoadingSingleMovie ? (
             <Loader />
           ) : (
             selectedID && (
