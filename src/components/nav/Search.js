@@ -1,13 +1,19 @@
-import style from './Search.module.css'
+import { useAppState } from "../../store/watchbox-context";
+import style from "./Search.module.css";
 
-export function Search({ title, setTitle }) {
+export function Search() {
+  const { state, dispatch } = useAppState();
+
+  const setSearchTitle = (newTitle) =>
+    dispatch({ type: "setTitle", payload: newTitle });
+
   return (
     <input
-    placeholder='Type movie or series title...'
+      placeholder="Type movie or series title..."
       className={style.input}
       type="text"
-      value={title}
-      onChange={(e) => setTitle(e.target.value)}
+      value={state.title}
+      onChange={(e) => setSearchTitle(e.target.value)}
     />
   );
 }

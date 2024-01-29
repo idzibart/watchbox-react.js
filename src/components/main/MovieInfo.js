@@ -1,26 +1,23 @@
 import style from "./MovieInfo.module.css";
 import { Button } from "../reusable/Button";
 import { useEffect, useState } from "react";
+import { useAppState } from "../../store/watchbox-context";
 
-export function MovieInfo({
-  setWantWatch,
-  wantWatch,
-  setWatched,
-  watched,
-  singleMovie,
-  selectedID,
-}) {
+export function MovieInfo() {
+  const { state, dispatch } = useAppState();
   const [isInWatched, setIsInWatched] = useState(false);
   const [isInWantWatch, setIsInWantWatch] = useState(false);
 
   useEffect(() => {
-    const foundInWatched = watched.some((movie) => movie.imdbID === selectedID);
-    const foundInWantWatch = wantWatch.some(
-      (movie) => movie.imdbID === selectedID
+    const foundInWatched = state.watched.some(
+      (movie) => movie.imdbID === state.selectedID
+    );
+    const foundInWantWatch = state.wantWatch.some(
+      (movie) => movie.imdbID === state.selectedID
     );
     setIsInWatched(foundInWatched);
     setIsInWantWatch(foundInWantWatch);
-  }, [watched, wantWatch, selectedID]);
+  }, [state.watched, state.wantWatch, state.selectedID]);
 
   const {
     imdbID: id,
@@ -33,44 +30,50 @@ export function MovieInfo({
     Actors: actors,
     Director: director,
     Genre: genre,
-  } = singleMovie;
+  } = state.singleMovie;
 
   function handleAddWatched() {
     if (isInWatched) {
-      const updatedWatched = watched.filter(
-        (movie) => movie.imdbID !== selectedID
+      const updatedWatched = state.watched.filter(
+        (movie) => movie.imdbID !== state.selectedID
       );
-      setWatched(updatedWatched);
+      dispatch({ type: "setWatched", payload: updatedWatched });
       setIsInWatched(false);
     } else {
       const newWatchedMovie = {
-        imdbID: selectedID,
+        imdbID: state.selectedID,
         Title: selectedTitle,
         Poster: poster,
         imdbRating,
         Runtime: runtime,
       };
-      setWatched([...watched, newWatchedMovie]);
+      dispatch({
+        type: "setWatched",
+        payload: [...state.watched, newWatchedMovie],
+      });
       setIsInWatched(true);
     }
   }
 
   function handleAddWantWatch() {
     if (isInWantWatch) {
-      const updatedWantWatch = wantWatch.filter(
-        (movie) => movie.imdbID !== selectedID
+      const updatedWantWatch = state.wantWatch.filter(
+        (movie) => movie.imdbID !== state.selectedID
       );
-      setWantWatch(updatedWantWatch);
-      setIsInWantWatch(false); //
+      dispatch({ type: "setWantWatch", payload: updatedWantWatch });
+      setIsInWantWatch(false);
     } else {
       const newWantWatchMovie = {
-        imdbID: selectedID,
+        imdbID: state.selectedID,
         Title: selectedTitle,
         Poster: poster,
         imdbRating,
         Runtime: runtime,
       };
-      setWantWatch([...wantWatch, newWantWatchMovie]);
+      dispatch({
+        type: "setWantWatch",
+        payload: [...state.wantWatch, newWantWatchMovie],
+      });
       setIsInWantWatch(true);
     }
   }
@@ -118,7 +121,9 @@ export function MovieInfo({
           <Button onClick={handleAddWatched} isActive={isInWatched}>
             👁️‍🗨️ Watched list
           </Button>
-          <Button onClick={handleAddWantWatch} isActive={isInWantWatch}>➕ Want watch list</Button>
+          <Button onClick={handleAddWantWatch} isActive={isInWantWatch}>
+            ➕ Want watch list
+          </Button>
         </div>
         <p className={style.text}>
           <span>Description</span>

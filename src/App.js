@@ -11,71 +11,26 @@ import { Loader } from "./components/reusable/Loader";
 import { useAppState } from "./store/watchbox-context";
 
 export default function App() {
-  const { state, dispatch } = useAppState();
-
-  const setSearchTitle = (newTitle) =>
-    dispatch({ type: "setTitle", payload: newTitle });
-
-  const handleDeleteWatched = (id) =>
-    dispatch({
-      type: "setWatched",
-      payload: state.watched.filter((movie) => movie.imdbID !== id),
-    });
-
-  const handleDeleteWantWatch = (id) =>
-    dispatch({
-      type: "setWantWatch",
-      payload: state.wantWatch.filter((movie) => movie.imdbID !== id),
-    });
+  const { state } = useAppState();
 
   return (
     <>
       <Navbar>
         <Logo />
-        <Search title={state.title} setTitle={setSearchTitle} />
+        <Search />
       </Navbar>
       <Main>
+        <Box>{state.isLoading ? <Loader /> : <SearchList />}</Box>
         <Box>
-          {state.isLoading ? (
+          {state.isLoadingSingleMovie ? (
             <Loader />
           ) : (
-            <SearchList
-              movies={state.movies}
-              selectedID={state.selectedID}
-              setSelectedID={(id) =>
-                dispatch({ type: "setSelectedID", payload: id })
-              }
-            />
+            state.selectedID && <MovieInfo />
           )}
         </Box>
         <Box>
-          {state.isLoadingSingleMovie && <Loader />}
-          {state.selectedID && (
-            <MovieInfo
-              selectedID={state.selectedID}
-              singleMovie={state.singleMovie}
-              setWatched={(watched) =>
-                dispatch({ type: "setWatched", payload: watched })
-              }
-              watched={state.watched}
-              setWantWatch={(wantWatch) =>
-                dispatch({ type: "setWantWatch", payload: wantWatch })
-              }
-              wantWatch={state.wantWatch}
-            />
-          )}
-        </Box>
-        <Box>
-          <WantWatch
-            wantWatch={state.wantWatch}
-            handleDeleteWantWatch={handleDeleteWantWatch}
-            singleMovie={state.singleMovie}
-          />
-          <IsWatched
-            watched={state.watched}
-            handleDeleteWatched={handleDeleteWatched}
-            singleMovie={state.singleMovie}
-          />
+          <WantWatch />
+          <IsWatched />
         </Box>
       </Main>
     </>
