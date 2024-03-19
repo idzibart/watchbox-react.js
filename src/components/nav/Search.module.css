@@ -24,7 +24,7 @@
   text-align: center;
 }
 
-@media only screen and (max-width: 920px) {
+@media only screen and (max-width: 921px) {
   .input {
     width: 30rem;
   }

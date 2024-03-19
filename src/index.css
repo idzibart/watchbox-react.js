@@ -29,3 +29,9 @@ body {
   padding: 2.4rem;
   overflow: hidden;
 }
+
+@media only screen and (max-width: 768px) {
+  body {
+    padding: 1rem;
+  }
+}

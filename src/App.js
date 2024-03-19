@@ -9,6 +9,7 @@ import { IsWatched } from "./components/main/IsWatched";
 import { Logo } from "./components/nav/Logo";
 import { Loader } from "./components/reusable/Loader";
 import { useAppState } from "./store/watchbox-context";
+import { ErrorMessage } from "./components/reusable/Error";
 
 export default function App() {
   const { state } = useAppState();
@@ -20,7 +21,11 @@ export default function App() {
         <Search />
       </Navbar>
       <Main>
-        <Box>{state.isLoading ? <Loader /> : <SearchList />}</Box>
+        <Box>
+          {state.isLoading && <Loader />}
+          {!state.isLoading && !state.error && <SearchList />}
+          {state.error && <ErrorMessage message={state.error} />}
+        </Box>
         <Box>
           {state.isLoadingSingleMovie ? (
             <Loader />

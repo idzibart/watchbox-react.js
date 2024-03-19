@@ -1,4 +1,4 @@
-.loader {
+.error {
   justify-content: center;
   text-align: center;
   font-size: 2rem;
@@ -6,7 +6,7 @@
 }
 
 @media only screen and (max-width: 1024px) {
-  .loader {
+  .error {
     text-align: center;
     font-size: 1.6rem;
     padding: 2rem;
@@ -14,7 +14,7 @@
 }
 
 @media only screen and (max-width: 682px) {
-  .loader {
+  .error {
     text-align: center;
     font-size: 1rem;
     padding: 1.4rem;

@@ -19,6 +19,8 @@ function reducer(state, action) {
   switch (action.type) {
     case "setIsLoading":
       return { ...state, isLoading: action.payload };
+    case "setError":
+      return { ...state, error: action.payload };
     case "setIsLoadingSingleMovie":
       return { ...state, isLoadingSingleMovie: action.payload };
     case "setTitle":
@@ -41,18 +43,57 @@ function reducer(state, action) {
 export function AppStateProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  useEffect(() => {
-    if (state.title.length >= 3) {
-      dispatch({ type: "setIsLoading", payload: true });
-      const search = setTimeout(() => {
-        fetch(`https://www.omdbapi.com/?apikey=${KEY}&s=${state.title}`)
-          .then((res) => res.json())
-          .then((data) => dispatch({ type: "setMovies", payload: data.Search }))
-          .finally(() => dispatch({ type: "setIsLoading", payload: false }));
-      }, 800);
-      return () => clearTimeout(search);
-    }
-  }, [state.title]);
+  function handleCloseMovie() {
+    dispatch({ type: "setSelectedID", payload: null });
+  }
+
+  useEffect(
+    function () {
+      const controller = new AbortController();
+
+      // if (state.title.length >= 3)
+      async function fetchMovies() {
+        try {
+          dispatch({ type: "setIsLoading", payload: true });
+          dispatch({ type: "setError", payload: "" });
+          const search = await fetch(
+            `https://www.omdbapi.com/?apikey=${KEY}&s=${state.title}`,
+            { signal: controller.signal }
+          );
+
+          if (!search.ok)
+            throw new Error("Something went wrong with fetching movies");
+
+          const data = await search.json();
+          if (data.Response === "False") throw new Error("Movie not found");
+
+          dispatch({ type: "setMovies", payload: data.Search });
+          dispatch({ type: "setError", payload: "" });
+        } catch (err) {
+          if (err.name !== "AbortError") {
+            console.log(err.message);
+            dispatch({ type: "setError", payload: err.message });
+          }
+        } finally {
+          dispatch({ type: "setIsLoading", payload: false });
+        }
+      }
+
+      if (state.title.length < 3) {
+        dispatch({ type: "setMovies", payload: [] });
+        dispatch({ type: "setError", payload: "" });
+        return;
+      }
+
+      handleCloseMovie();
+      fetchMovies();
+
+      return function () {
+        controller.abort();
+      };
+    },
+    [state.title]
+  );
 
   useEffect(() => {
     if (state.selectedID) {
