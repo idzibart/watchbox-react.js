@@ -1,5 +1,21 @@
-.loader{
+.loader {
+  text-align: center;
+  font-size: 2rem;
+  padding: 2.4rem;
+}
+
+@media only screen and (max-width: 1024px) {
+  .loader {
     text-align: center;
-    font-size: 2rem;
-    padding: 2.4rem;
+    font-size: 1.6rem;
+    padding: 2rem;
+  }
+}
+
+@media only screen and (max-width: 682px) {
+  .loader {
+    text-align: center;
+    font-size: 1rem;
+    padding: 1.4rem;
+  }
 }

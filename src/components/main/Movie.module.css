@@ -1,3 +1,9 @@
-.data{
-    font-size: 1.2rem;
+.data {
+  font-size: 1.2rem;
+}
+
+@media only screen and (max-width: 768px) {
+  .data {
+    font-size: 1rem;
+  }
 }
