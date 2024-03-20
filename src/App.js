@@ -10,6 +10,7 @@ import { Logo } from "./components/nav/Logo";
 import { Loader } from "./components/reusable/Loader";
 import { useAppState } from "./store/watchbox-context";
 import { ErrorMessage } from "./components/reusable/Error";
+import customstyle from "./components/reusable/Box.module.css";
 
 export default function App() {
   const { state } = useAppState();
@@ -33,7 +34,7 @@ export default function App() {
             state.selectedID && <MovieInfo />
           )}
         </Box>
-        <Box>
+        <Box custom={customstyle.mobile}>
           <WantWatch />
           <IsWatched />
         </Box>

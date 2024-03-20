@@ -28,16 +28,18 @@ export function WantWatch() {
         <p>{state.wantWatch.length} movies</p>
         <p>{`${timeSum} minutes (${hours} h ${minutes} min)`}</p>
       </header>
-      <ul>
-        {state.wantWatch.map((movie) => (
-          <List custom={customStyle.rate} key={movie.imdbID}>
-            <MovieRate
-              onClick={() => handleDeleteWantWatch(movie.imdbID)}
-              movie={movie}
-            />
-          </List>
-        ))}
-      </ul>
+      <main className={style.ul}>
+        <ul>
+          {state.wantWatch.map((movie) => (
+            <List custom={customStyle.rate} key={movie.imdbID}>
+              <MovieRate
+                onClick={() => handleDeleteWantWatch(movie.imdbID)}
+                movie={movie}
+              />
+            </List>
+          ))}
+        </ul>
+      </main>
     </div>
   );
 }

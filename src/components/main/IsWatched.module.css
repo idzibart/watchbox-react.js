@@ -1,6 +1,6 @@
 .list {
   height: 50%;
-  overflow: scroll;
+  overflow: hidden;
 }
 
 .list header {
@@ -12,6 +12,11 @@
   font-size: 1.6rem;
 }
 
+.ul {
+  overflow: scroll;
+  height: 100%;
+}
+
 @media only screen and (max-width: 1024px) {
   .list h3 {
     font-size: 1.2rem;
@@ -21,5 +26,9 @@
 @media only screen and (max-width: 682px) {
   .list h3 {
     font-size: 1rem;
+  }
+  .list {
+    height: 100%;
+    width: 100%;
   }
 }
